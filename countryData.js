@@ -12,7 +12,7 @@ async function getCountryData() {
 
         const sortedCountries = data
             .sort((a,b) => a.name.common.localeCompare(b.name.common)) //localeCompare method to sort names
-            .map(country => `<ul><li> <span class="flag">${country.flag}</span> ${country.name.common} </li></ul>`)
+            .map(country => `<ul><li> <img class="flag" src="${country.flags.svg}"> ${country.name.common} </li></ul>`)
             .join('');
 
         document.getElementById('countries-list').innerHTML = `${sortedCountries}`; //DOM to display the data
