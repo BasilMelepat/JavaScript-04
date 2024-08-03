@@ -6,30 +6,20 @@
 async function getCountryData() {
     try {
         const response = await fetch('https://restcountries.com/v3.1/all');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log(data); // Log data to console
-        displayCountryData(data);
-    } 
-    
-    catch (error) {
-        console.error('Fetch error:', error);
-        document.getElementById('errorMessage').textContent = 'Failed to fetch country data.';
+        const data = await response.json(); //JSON response
+
+        console.log('Countries data:', data); //Log data to the console
+
+        const sortedCountries = data
+            .sort((a,b) => a.name.common.localeCompare(b.name.common)) //localeCompare method to sort names
+            .map(country => `<ul><li> <span class="flag">${country.flag}</span> ${country.name.common} </li></ul>`)
+            .join('');
+
+        document.getElementById('countries-list').innerHTML = `${sortedCountries}`; //DOM to display the data
+
+    } catch (error) {
+        document.getElementById('countries-list').innerHTML = `Error loading countries`; //Error message if fetch fails
     }
-}
-
-function displayCountryData(data) {
-    data.sort((a, b) => a.name.common.localeCompare(b.name.common)); // 'localeCompare' method is used for sorting
-    const countryDataDiv = document.getElementById('countryData');
-    countryDataDiv.innerHTML = ''; // Clear any existing data
-
-    data.forEach(country => {
-        const countryDiv = document.createElement('div'); // DOM to display data
-        countryDiv.textContent = country.name.common;
-        countryDataDiv.appendChild(countryDiv);
-    });
 }
 
 getCountryData();
